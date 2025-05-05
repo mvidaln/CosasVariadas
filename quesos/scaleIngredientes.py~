@@ -1,0 +1,55 @@
+def scale_ingredients(milk_amount_liters, original_ingredients):
+    """
+    Scale the ingredients based on the amount of milk used and express them as combinations
+    of the allowed teaspoon measurements (1/2, 1/4, ..., 1/128).
+
+    :param milk_amount_liters: The amount of milk in liters.
+    :param original_ingredients: A dictionary of original ingredients and their amounts (in teaspoons).
+    :return: A dictionary of scaled ingredients expressed as combinations of teaspoon measurements.
+    """
+    # Define the set of teaspoon measurements in descending order
+    teaspoon_measurements = [1/2, 1/4, 1/8, 1/16, 1/32, 1/64, 1/128]
+
+    scaled_ingredients = {}
+    for ingredient, amount in original_ingredients.items():
+        # Scale the ingredient amount
+        scaled_amount = amount * milk_amount_liters
+
+        # Break down the scaled amount into combinations of teaspoon measurements
+        remaining_amount = scaled_amount
+        combination = []
+        for measurement in teaspoon_measurements:
+            if remaining_amount >= measurement:
+                count = int(remaining_amount // measurement)
+                combination.append(f"{count} x {measurement} tsp")
+                remaining_amount -= count * measurement
+
+        # If there's a tiny remainder due to floating-point precision, ignore it
+        if remaining_amount > 1e-6:  # Threshold for floating-point precision
+            combination.append(f"~{remaining_amount:.6f} tsp (remainder)")
+
+        # Store the combination as a string
+        scaled_ingredients[ingredient] = " + ".join(combination) if combination else "0 tsp"
+
+    return scaled_ingredients
+
+# Example usage
+original_ingredients = {
+    "salt": 1/2,        # 1/2 tsp
+    "pepper": 1/4,      # 1/4 tsp
+    "garlic_powder": 1/8,  # 1/8 tsp
+    "onion_powder": 1/16,  # 1/16 tsp
+    "paprika": 1/32,    # 1/32 tsp
+    "cayenne": 1/64,    # 1/64 tsp
+    "mustard_seed": 1/128  # 1/128 tsp
+}
+
+# Amount of milk you want to use (in liters)
+milk_amount_liters = 2.5  # Example: 2.5 liters of milk
+
+# Scale the ingredients
+scaled_ingredients = scale_ingredients(milk_amount_liters, original_ingredients)
+
+# Print the scaled ingredients
+for ingredient, amount in scaled_ingredients.items():
+    print(f"{ingredient}: {amount}")
