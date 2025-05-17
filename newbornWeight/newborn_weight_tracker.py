@@ -8,6 +8,8 @@ import sys
 import csv
 import os
 
+# python newborn_weight_tracker.py --csv pesoAurora.cvs --gender girls
+
 # WHO standard weight-for-age percentiles for newborns (0-28 days)
 # Source data approximated from standard growth charts
 # Format: day, p3, p10, p25, p50, p75, p90, p97 (in grams)
@@ -156,7 +158,7 @@ def plot_weight_chart(birth_info, measurements, unit="hours", gender="boys", out
         x_label = "Horas desde nacimiento"
         if unit.lower() == "days":
             x_values = measurement_times / 24
-            x_label = "Days since birth"
+            x_label = "Dias desde nacimiento"
         
         # Create the figure
         plt.figure(figsize=(12, 8))
